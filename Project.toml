@@ -1,0 +1,8 @@
+[deps]
+CodecZlib = "944b1d66-785c-5afd-91f1-9de20f533193"
+DataFrames = "a93c6f00-e57d-5684-b7b6-d8193f3e46c0"
+GLMakie = "e9467ef8-e4e7-5192-8a1a-b1aee30e663a"
+HTTP = "cd3eb016-35fb-5094-929b-558a96fad6f3"
+Makie = "ee78f7c6-11fb-53f2-987a-cfe4a2b5a57a"
+RData = "df47a6cb-8c03-5eed-afd8-b6050d6c41da"
+StatsBase = "2913bbd2-ae8a-5f71-8c99-4fb6c76f3a91"
