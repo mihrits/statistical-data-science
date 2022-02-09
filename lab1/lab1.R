@@ -8,7 +8,7 @@ barplot(prop.table(table(sugu, olu),2), legend=T,
         ylab="Naistudengite osakaal",
         legend.text=c("naine","mees"))
 
-pikkus[c(1,4,24)]
+kaal[c(1,4,24)]
 
 ftable(olu[sugu==2])
 
