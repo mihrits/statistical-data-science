@@ -4,4 +4,22 @@ author: Moorits Mihkel Muru
 date: 14.02.22
 ---
 
-Hello world!
+```julia
+using DataFrames     # Tables for data
+using StatsBase      # Basic statistics tools
+using FreqTables     # Frequency tables
+using StatsPlots     # Plotting
+using HTTP           # Stream data from web
+using FileIO         # Reading in a file from a web stream
+using CodecZlib      # Unpacking RData file
+using RData          # Reading in RData
+```
+
+First, let's aquire the data.
+
+```julia, results="hidden"
+students_dataset_url = "http://www.ms.ut.ee/mart/andmeteadus/students.RData"
+request = HTTP.get(students_dataset_url)
+buffer = CodecZlib.GzipDecompressorStream(IOBuffer(request.body))
+students = DataFrame(RData.load(Stream{format"RData"}(buffer))["students"])
+```

@@ -658,14 +658,38 @@ div.title {text-align: center;}
           <h5>14.02.22</h5>
         </div>
 
-        <p>Hello world&#33;</p>
+        
+<pre class='hljl'>
+<span class='hljl-k'>using</span><span class='hljl-t'> </span><span class='hljl-n'>DataFrames</span><span class='hljl-t'>     </span><span class='hljl-cs'># Tables for data</span><span class='hljl-t'>
+</span><span class='hljl-k'>using</span><span class='hljl-t'> </span><span class='hljl-n'>StatsBase</span><span class='hljl-t'>      </span><span class='hljl-cs'># Basic statistics tools</span><span class='hljl-t'>
+</span><span class='hljl-k'>using</span><span class='hljl-t'> </span><span class='hljl-n'>FreqTables</span><span class='hljl-t'>     </span><span class='hljl-cs'># Frequency tables</span><span class='hljl-t'>
+</span><span class='hljl-k'>using</span><span class='hljl-t'> </span><span class='hljl-n'>StatsPlots</span><span class='hljl-t'>     </span><span class='hljl-cs'># Plotting</span><span class='hljl-t'>
+</span><span class='hljl-k'>using</span><span class='hljl-t'> </span><span class='hljl-n'>HTTP</span><span class='hljl-t'>           </span><span class='hljl-cs'># Stream data from web</span><span class='hljl-t'>
+</span><span class='hljl-k'>using</span><span class='hljl-t'> </span><span class='hljl-n'>FileIO</span><span class='hljl-t'>         </span><span class='hljl-cs'># Reading in a file from a web stream</span><span class='hljl-t'>
+</span><span class='hljl-k'>using</span><span class='hljl-t'> </span><span class='hljl-n'>CodecZlib</span><span class='hljl-t'>      </span><span class='hljl-cs'># Unpacking RData file</span><span class='hljl-t'>
+</span><span class='hljl-k'>using</span><span class='hljl-t'> </span><span class='hljl-n'>RData</span><span class='hljl-t'>          </span><span class='hljl-cs'># Reading in RData</span>
+</pre>
+
+
+
+<p>First, let&#39;s aquire the data.</p>
+
+
+<pre class='hljl'>
+<span class='hljl-n'>students_dataset_url</span><span class='hljl-t'> </span><span class='hljl-oB'>=</span><span class='hljl-t'> </span><span class='hljl-s'>&quot;http://www.ms.ut.ee/mart/andmeteadus/students.RData&quot;</span><span class='hljl-t'>
+</span><span class='hljl-n'>request</span><span class='hljl-t'> </span><span class='hljl-oB'>=</span><span class='hljl-t'> </span><span class='hljl-n'>HTTP</span><span class='hljl-oB'>.</span><span class='hljl-nf'>get</span><span class='hljl-p'>(</span><span class='hljl-n'>students_dataset_url</span><span class='hljl-p'>)</span><span class='hljl-t'>
+</span><span class='hljl-n'>buffer</span><span class='hljl-t'> </span><span class='hljl-oB'>=</span><span class='hljl-t'> </span><span class='hljl-n'>CodecZlib</span><span class='hljl-oB'>.</span><span class='hljl-nf'>GzipDecompressorStream</span><span class='hljl-p'>(</span><span class='hljl-nf'>IOBuffer</span><span class='hljl-p'>(</span><span class='hljl-n'>request</span><span class='hljl-oB'>.</span><span class='hljl-n'>body</span><span class='hljl-p'>))</span><span class='hljl-t'>
+</span><span class='hljl-n'>students</span><span class='hljl-t'> </span><span class='hljl-oB'>=</span><span class='hljl-t'> </span><span class='hljl-nf'>DataFrame</span><span class='hljl-p'>(</span><span class='hljl-n'>RData</span><span class='hljl-oB'>.</span><span class='hljl-nf'>load</span><span class='hljl-p'>(</span><span class='hljl-nf'>Stream</span><span class='hljl-p'>{</span><span class='hljl-so'>format&quot;RData&quot;</span><span class='hljl-p'>}(</span><span class='hljl-n'>buffer</span><span class='hljl-p'>))[</span><span class='hljl-s'>&quot;students&quot;</span><span class='hljl-p'>])</span>
+</pre>
+
+
 
 
         <HR/>
         <div class="footer">
           <p>
             Published from <a href="lab2.jmd">lab2.jmd</a>
-            using <a href="http://github.com/JunoLab/Weave.jl">Weave.jl</a> v0.10.10 on 2022-02-14.
+            using <a href="http://github.com/JunoLab/Weave.jl">Weave.jl</a> v0.10.10 on 2022-02-16.
           </p>
         </div>
       </div>
