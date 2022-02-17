@@ -4,10 +4,13 @@ author: Moorits Mihkel Muru
 date: 14.02.22
 ---
 
+Import the packages we need.
+
 ```julia
 using DataFrames     # Tables for data
 using StatsBase      # Basic statistics tools
 using FreqTables     # Frequency tables
+using Distributions  # Normal distribution
 using StatsPlots     # Plotting
 using HTTP           # Stream data from web
 using FileIO         # Reading in a file from a web stream
@@ -15,11 +18,117 @@ using CodecZlib      # Unpacking RData file
 using RData          # Reading in RData
 ```
 
-First, let's aquire the data.
+First, let's aquire the data from the web.
 
 ```julia, results="hidden"
 students_dataset_url = "http://www.ms.ut.ee/mart/andmeteadus/students.RData"
 request = HTTP.get(students_dataset_url)
 buffer = CodecZlib.GzipDecompressorStream(IOBuffer(request.body))
 students = DataFrame(RData.load(Stream{format"RData"}(buffer))["students"])
+```
+## Height distributions of male and female students
+
+```julia, echo=false
+@df students histogram(:height[:gender.==1], bins=20, normalize=true,
+                       color=:red3, label="female", fillalpha=0.5,
+                       xlim = (150,210), xlabel="Height (cm)", ylabel="Frequency",
+                       title="Distribution of height of male and female students")
+@df students histogram!(:height[:gender.==2], bins=20, normalize=true,
+                        color=:blue, label="male", fillalpha=0.5)
+```
+
+```julia, echo=false
+function preplotting_processing(mask; source=students, feature=:height)
+    data = collect(skipmissing(source[mask, feature]))
+    (
+    data = data,
+    range = range(minimum(data), maximum(data), length=100),
+    fit = Normal(mean(data), std(data)),
+    )
+end
+
+fullrange = range(150,210, length=100)
+female = preplotting_processing(students.gender.==1)
+male = preplotting_processing(students.gender.==2)
+
+plot_female = histogram(female.data,
+    bins=20, normalize=true, color=:red3, fillalpha=0.5, label="",
+    xlab="Height (cm)", title="Female students", xlimit=(150,210), yaxis=false, yticks=false, xgrid=false)
+plot!(fullrange, pdf.(female.fit, fullrange), width = 3, color=:red, label="")
+
+plot_male = histogram(male.data,
+    bins=20, normalize=true, color=:blue, fillalpha=0.5, label="",
+    xlabel="Height (cm)", title="Male students", xlimit=(150,210), yaxis=false, yticks=false, xgrid=false)
+plot!(fullrange, pdf.(male.fit, fullrange), width=3, color=:blue, label="")
+
+plot(plot_female, plot_male, layout=(2,1))
+```
+
+# Weight distributions of male and female students
+
+```julia, echo=false
+@df students histogram(collect(skipmissing(:weight[:gender.==1])), bins=20, normalize=true,
+                       color=:red3, label="female", fillalpha=0.5,
+                       xlim = (40,120), xlabel="Height (cm)", ylabel="Frequency",
+                       title="Distribution of height of male and female students")
+@df students histogram!(collect(skipmissing(:weight[:gender.==2])), bins=20, normalize=true,
+                        color=:blue, label="male", fillalpha=0.5)
+```
+
+```{julia, echo=false}
+femalew = preplotting_processing(students.gender.==1, feature=:weight)
+malew = preplotting_processing(students.gender.==2, feature=:weight)
+fullrangew = range(40, 120, length=100)
+
+plot_female = histogram(femalew.data,
+    bins=20, normalize=true, color=:red3, fillalpha=0.5, label="",
+    xlab="Weight (kg)", title="Female students", xlimit=(40,120), yaxis=false, yticks=false, xgrid=false)
+plot!(fullrangew, pdf.(femalew.fit, fullrangew), width = 3, color=:red, label="")
+
+plot_male = histogram(malew.data,
+    bins=20, normalize=true, color=:blue, fillalpha=0.5, label="",
+    xlabel="Weight (kg)", title="Male students", xlimit=(40,120), yaxis=false, yticks=false, xgrid=false)
+plot!(fullrangew, pdf.(malew.fit, fullrangew), width=3, color=:blue, label="")
+
+plot(plot_female, plot_male, layout=(2,1))
+```
+
+Four groups by gender and whether or not they have used ambulance in the last two years.
+
+```{julia, fig_width=10, fig_height=6, echo=false}
+mask_female_ambu = replace((students.gender .== 1) .& (students.ambulance .== 1), missing => false)
+mask_female_noambu = replace((students.gender .== 1) .& (students.ambulance .== 0), missing => false)
+mask_male_ambu = replace((students.gender .== 2) .& (students.ambulance .== 1), missing => false)
+mask_male_noambu = replace((students.gender .== 2) .& (students.ambulance .== 0), missing => false)
+
+fa = preplotting_processing(mask_female_ambu, feature=:weight)
+fna = preplotting_processing(mask_female_noambu, feature=:weight)
+ma = preplotting_processing(mask_male_ambu, feature=:weight)
+mna = preplotting_processing(mask_male_noambu, feature=:weight)
+
+plot_fa = histogram(fa.data,
+    bins=30, normalize=true, color=:red3, fillalpha=0.5, label="",
+    xlab="Weight (kg)", title="Female students that have used ambulance (n=$(sum(mask_female_ambu)))",
+    xlimit=(40,120), yaxis=false, yticks=false, xgrid=false, titlefontsize=10)
+plot!(fullrangew, pdf.(fa.fit, fullrangew), width = 3, color=:red, label="")
+
+plot_fna = histogram(fna.data,
+    bins=30, normalize=true, color=:red3, fillalpha=0.5, label="",
+    xlab="Weight (kg)", title="Female students that have not used ambulance (n=$(sum(mask_female_noambu)))",
+    xlimit=(40,120), yaxis=false, yticks=false, xgrid=false, titlefontsize=10)
+plot!(fullrangew, pdf.(fna.fit, fullrangew), width = 3, color=:red, label="")
+
+plot_ma = histogram(ma.data,
+    bins=30, normalize=true, color=:blue, fillalpha=0.5, label="",
+    xlab="Weight (kg)", title="Male students that have used ambulance (n=$(sum(mask_male_ambu)))",
+    xlimit=(40,120), yaxis=false, yticks=false, xgrid=false, titlefontsize=10)
+plot!(fullrangew, pdf.(ma.fit, fullrangew), width = 3, color=:blue, label="")
+
+plot_mna = histogram(mna.data,
+    bins=30, normalize=true, color=:blue, fillalpha=0.5, label="",
+    xlab="Weight (kg)", title="Male students that have not used ambulance (n=$(sum(mask_male_noambu)))",
+    xlimit=(40,120), yaxis=false, yticks=false, xgrid=false, titlefontsize=10)
+plot!(fullrangew, pdf.(mna.fit, fullrangew), width = 3, color=:blue, label="")
+
+plot(plot_fa, plot_fna, plot_ma, plot_mna, layout=(2,2))
 ```
