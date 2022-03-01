@@ -44,3 +44,24 @@ ChisqTest([585, 1191, 590], [0.25, 0.5, 0.25])
 # Are earthquakes caused by sinful activities?
 earthquake_data_url = "http://www.ms.ut.ee/mart/andmeteadus/quake.csv"
 earthquakes = DataFrame(CSV.File(IOBuffer(HTTP.get(earthquake_data_url).body)))
+# Create a column with weekdays with function composing operator ∘
+# First applies chop, then DateTime, then dayofweek
+# Period between the parenthesis indicates broadcasting
+earthquakes.weekday = (dayofweek ∘ DateTime ∘ chop).(earthquakes.time)
+freqtable(earthquakes.weekday)
+ChisqTest([count(==(x), earthquakes.weekday) for x in 1:7]) # It turns out, earthquakes are the sign of God's wrath
+confint(ans, level=0.995)
+
+# Create dataframe with rows that have no missing values for weight nor medical_care
+weight_medicalcare_students = dropmissing(students, [:weight, :medical_care])
+# Test if there is difference in weight if the students has used medical care or not
+UnequalVarianceTTest(weight_medicalcare_students.weight[weight_medicalcare_students.medical_care.==1],
+    weight_medicalcare_students.weight[weight_medicalcare_students.medical_care.==0])
+
+# Are the earthquakes on Tuesdays as strong as on other days?
+UnequalVarianceTTest(earthquakes.mag[earthquakes.weekday.==2], earthquakes.mag[earthquakes.weekday.!=2])
+# p-value 0.0803 says that they are a bit weaker, but not with a 95% confidence level
+
+# Do students, who have needed the help of an ambulance in the past have smaller probability of rating their health as very good?
+freqtable(students.ambulance, students.health .== "very good")
+ChisqTest([13/(13+60), 52/(52+355)])
