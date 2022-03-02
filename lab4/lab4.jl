@@ -50,7 +50,7 @@ earthquakes = DataFrame(CSV.File(IOBuffer(HTTP.get(earthquake_data_url).body)))
 earthquakes.weekday = (dayofweek ∘ DateTime ∘ chop).(earthquakes.time)
 freqtable(earthquakes.weekday)
 ChisqTest([count(==(x), earthquakes.weekday) for x in 1:7]) # It turns out, earthquakes are the sign of God's wrath
-confint(ans, level=0.995)
+confint(ChisqTest([count(==(x), earthquakes.weekday) for x in 1:7]), level=0.995)
 
 # Create dataframe with rows that have no missing values for weight nor medical_care
 weight_medicalcare_students = dropmissing(students, [:weight, :medical_care])
@@ -64,4 +64,8 @@ UnequalVarianceTTest(earthquakes.mag[earthquakes.weekday.==2], earthquakes.mag[e
 
 # Do students, who have needed the help of an ambulance in the past have smaller probability of rating their health as very good?
 freqtable(students.ambulance, students.health .== "very good")
-ChisqTest([13/(13+60), 52/(52+355)])
+# I don't know what the equivalent of prop.test is...
+
+
+# Chi² test for comparing study variable distribution
+prop(freqtable(students, :gender, :beer), margins=1).*100
