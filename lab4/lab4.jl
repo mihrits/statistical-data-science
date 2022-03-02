@@ -69,3 +69,15 @@ freqtable(students.ambulance, students.health .== "very good")
 
 # Chi² test for comparing study variable distribution
 prop(freqtable(students, :gender, :beer), margins=1).*100
+gender_beer_table = freqtable(students, :gender, :beer)
+ChisqTest(gender_beer_table.array)
+
+# Analyzing relation between sport and gender
+gender_sport_table = freqtable(students, :gender, :sport, skipmissing=true)
+ChisqTest(gender_sport_table)
+ctg  = repeat(["Female", "Male"], outer = 5)
+name = repeat(1:5, inner = 2)
+prop_gender_sport_table = prop(prop(gender_sport_table, margins=1),margins=2).*100
+groupedbar(name, prop_gender_sport_table, group = ctg,
+        bar_positions=:stack, xlim=(0.5,6.9), xticks=(1:5),
+        framestyle = :box, color = repeat([:pink, :skyblue], outer=5))
