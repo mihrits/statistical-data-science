@@ -3,18 +3,12 @@
 # Solutions in Julia
 
 using DataFrames      # Tables for data
-using StatsBase       # Basic statistics tools
-using FreqTables      # Frequency tables
-using Distributions   # Normal distribution
-using HypothesisTests # Hypothesis Testing
 using GLM             # Linear models / regression
 using StatsPlots      # Plotting
 using HTTP            # Stream data from web
 using FileIO          # Reading in a file from a web stream
 using CodecZlib       # Unpacking RData file
 using RData           # Reading RData files
-using CSV             # Reading CSV files
-using Dates           # Standard library for working with datetime formats
 
 # Reading the data from web
 students_dataset_url = "http://www.ms.ut.ee/mart/andmeteadus/students.RData"
