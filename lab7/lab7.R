@@ -154,14 +154,27 @@ countries$bmi = with(countries, (bmiM + bmiW) / 2)
 
 # b. Look at the histogram of new BMI and GDP – are they nearly normally distributed variables? 
 # your code
-
+hist(countries$bmi)
 
 # c. Draw a scatter plot (with the text command you can add country names)
 # your code
-
+with(countries, plot(gdp, bmi, log="x", pch="")) 
+with(countries, text(gdp, bmi, country))
 
 # d. Add the regression line to the plot
 # your code
+model6 = lm(bmi ~ lgdp, countries)
+summary(model6)
+plot(model6, which=1)
+
+with(countries, plot(lgdp, bmi, pch="")) 
+with(countries, text(lgdp, bmi, country))
+points(countries$lgdp, fitted(model6), col = 2, pch = 16)
+
+with(countries, plot(gdp, bmi, pch="", log="x"))
+with(countries, text(gdp, bmi, country))
+points(countries$gdp, fitted(model6), col = 2, pch = 16)
+
 
 
 # e. Fit a simple regression model. Decide whether to use the logarithmic transformation on GDP or not.
@@ -170,10 +183,25 @@ countries$bmi = with(countries, (bmiM + bmiW) / 2)
 
 # f. Should you use a lienar or non-linear model? If needed fit a non-linear model (i.e. polynomial model). 
 # your code
+model7 = lm(bmi ~ poly(lgdp, 2), countries)
+summary(model7)
 
+model8 = lm(bmi ~ poly(lgdp, 3), countries)
+summary(model8)
+
+BIC(model6)
+BIC(model7)
+BIC(model8)
+
+with(countries, plot(gdp, bmi, pch="", log="x"))
+with(countries, text(gdp, bmi, country))
+points(countries$gdp, fitted(model7), col = 2, pch = 16)
 
 # g. What is the prognosis of mean BMI in Estonia (with 95% CI) and how much does it differ from reality?
 # your code
+
+countries["Estonia", "bmi"]
+predict(model7, interval = "predict")["Estonia",]
 
 
 # h. What is the prognosis of mean BMI in your country (with 95% CI) and how much does it differ from reality?
@@ -184,9 +212,12 @@ countries$bmi = with(countries, (bmiM + bmiW) / 2)
 
 ## Exercises 8 ----
 # Check if mean BMI is dependent on education level and country’s latitude (additionally to GDP)? 
-# Calculate the mean education level of men-women  
+# Calculate the mean education level of men-women
+countries$educ = with(countries, (educM + educW) / 2)
 
 # your code   
+model9 = lm(bmi ~ educ + lgdp + latitude, countries)
+summary(model9)
 
 
 # Fit the multiple regression model using:
@@ -198,24 +229,37 @@ summary(model)
 
 # Fit a model with mean BMI of men-women and then fit a model where BMI is treated separately 
 #  for men and women (models with bmiN ja bmiM. Leave the averaged men-women education as it is).
-
-
+model10 = lm(bmiM ~ poly(lgdp, 2) + educM, countries)
+model11 = lm(bmiW ~ poly(lgdp, 2), countries)
+summary(model10)
+summary(model11)
 
 ## Other exercises - not mandatory ----
 # Fit a model with GDP, education and latitude influencing the difference of BMI between men and women.
 
 # your code
+countries$bmiDiff = with(countries, bmiM-bmiW)
+model12 = lm(bmiDiff ~ poly(lgdp, 2) + latitude + educ, countries)
+summary(model12)
 
 
 # Is alcohol consumption dependent on latitude? What other variables should be considered for this model?
 
 # your code
+model13 = lm(alco ~ latitude + educ, countries)
+summary(model13)
 
 
 
 # Does life expectancy of men depend on alcohol consumption? What are your conclusions? 
 
 # your code
+model14 = lm(lifeM ~ alco, countries)
+summary(model14)
+plot(model14, which=1)
+with(countries, plot(alco, lifeM, pch=""))
+with(countries, text(alco, lifeM, country))
+points(countries$alco, fitted(model14), col = 2, pch = 16)
 
 
 
@@ -223,4 +267,6 @@ summary(model)
 #  Would the results of this analysis give the right answer at all? 
 
 # your code
+countries["Estonia", "alco"]
+predict(model14, newdata = data.frame(alco = c(countries["Estonia", "alco"] - 5)))
 
