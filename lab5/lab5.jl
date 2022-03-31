@@ -5,6 +5,7 @@
 using DataFrames      # Tables for data
 using GLM             # Linear models / regression
 using StatsPlots      # Plotting
+using Statistics      # Correlation matrix
 using HTTP            # Stream data from web
 using FileIO          # Reading in a file from a web stream
 using CodecZlib       # Unpacking RData file
