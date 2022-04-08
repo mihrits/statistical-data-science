@@ -1,6 +1,6 @@
 # This file is machine-generated - editing it directly is not advised
 
-julia_version = "1.7.1"
+julia_version = "1.7.2"
 manifest_format = "2.0"
 
 [[deps.AbstractFFTs]]
@@ -772,10 +772,10 @@ deps = ["Artifacts", "Dates", "Downloads", "LibGit2", "Libdl", "Logging", "Markd
 uuid = "44cfe95a-1eb2-52ea-b672-e2afdf69b78f"
 
 [[deps.PlotThemes]]
-deps = ["PlotUtils", "Requires", "Statistics"]
-git-tree-sha1 = "a3a964ce9dc7898193536002a6dd892b1b5a6f1d"
+deps = ["PlotUtils", "Statistics"]
+git-tree-sha1 = "8162b2f8547bc23876edd0c5181b27702ae58dce"
 uuid = "ccf2f8ad-2431-5c83-bf29-c5338b663b6a"
-version = "2.0.1"
+version = "3.0.0"
 
 [[deps.PlotUtils]]
 deps = ["ColorSchemes", "Colors", "Dates", "Printf", "Random", "Reexport", "Statistics"]
@@ -785,9 +785,9 @@ version = "1.2.0"
 
 [[deps.Plots]]
 deps = ["Base64", "Contour", "Dates", "Downloads", "FFMPEG", "FixedPointNumbers", "GR", "GeometryBasics", "JSON", "Latexify", "LinearAlgebra", "Measures", "NaNMath", "Pkg", "PlotThemes", "PlotUtils", "Printf", "REPL", "Random", "RecipesBase", "RecipesPipeline", "Reexport", "Requires", "Scratch", "Showoff", "SparseArrays", "Statistics", "StatsBase", "UUIDs", "UnicodeFun", "Unzip"]
-git-tree-sha1 = "edec0846433f1c1941032385588fd57380b62b59"
+git-tree-sha1 = "88ee01b02fba3c771ac4dce0dfc4ecf0cb6fb772"
 uuid = "91a5bcdd-55d7-5caf-9e0b-520d859cae80"
-version = "1.27.4"
+version = "1.27.5"
 
 [[deps.PooledArrays]]
 deps = ["DataAPI", "Future"]
@@ -943,9 +943,9 @@ uuid = "2f01184e-e22b-5df5-ae63-d93ebab69eaf"
 
 [[deps.SpecialFunctions]]
 deps = ["ChainRulesCore", "IrrationalConstants", "LogExpFunctions", "OpenLibm_jll", "OpenSpecFun_jll"]
-git-tree-sha1 = "5ba658aeecaaf96923dce0da9e703bd1fe7666f9"
+git-tree-sha1 = "cbf21db885f478e4bd73b286af6e67d1beeebe4c"
 uuid = "276daf66-3868-5448-9aa4-cd146d93841b"
-version = "2.1.4"
+version = "1.8.4"
 
 [[deps.StaticArrays]]
 deps = ["LinearAlgebra", "Random", "Statistics"]
@@ -971,9 +971,9 @@ version = "0.33.16"
 
 [[deps.StatsFuns]]
 deps = ["ChainRulesCore", "HypergeometricFunctions", "InverseFunctions", "IrrationalConstants", "LogExpFunctions", "Reexport", "Rmath", "SpecialFunctions"]
-git-tree-sha1 = "25405d7016a47cf2bd6cd91e66f4de437fd54a07"
+git-tree-sha1 = "72e6abd6fc9ef0fa62a159713c83b7637a14b2b8"
 uuid = "4c63d2b9-4356-54db-8cca-17b64c39e42c"
-version = "0.9.16"
+version = "0.9.17"
 
 [[deps.StatsModels]]
 deps = ["DataAPI", "DataStructures", "LinearAlgebra", "Printf", "REPL", "ShiftedArrays", "SparseArrays", "StatsBase", "StatsFuns", "Tables"]
@@ -1035,9 +1035,9 @@ uuid = "8dfed614-e22c-5e08-85e1-65c5234f0b40"
 
 [[deps.TimeZones]]
 deps = ["Dates", "Downloads", "InlineStrings", "LazyArtifacts", "Mocking", "Printf", "RecipesBase", "Serialization", "Unicode"]
-git-tree-sha1 = "2d4b6de8676b34525ac518de36006dc2e89c7e2e"
+git-tree-sha1 = "0a359b0ee27e4fbc90d9b3da1f48ddc6f98a0c9e"
 uuid = "f269a46b-ccf7-5d73-abea-4c690281aa53"
-version = "1.7.2"
+version = "1.7.3"
 
 [[deps.TranscodingStreams]]
 deps = ["Random", "Test"]
