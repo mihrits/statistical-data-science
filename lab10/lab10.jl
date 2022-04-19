@@ -17,4 +17,9 @@ using RData           # Reading RData files
 dataset_url = "http://www.ms.ut.ee/mart/andmeteadus/WB.RData"
 request = HTTP.get(dataset_url)
 buffer = CodecZlib.GzipDecompressorStream(IOBuffer(request.body))
-data = only(values(DataFrame(RData.load(Stream{format"RData"}(buffer))))) # FIXME
+data = only(values(RData.load(Stream{format"RData"}(buffer))))
+
+dataclean = dropmissing(data)
+matdata = Matrix(dataclean[!, 2:end])
+normdata = (matdata .- mean(matdata, dims=1)) ./ std(matdata, dims=1)
+pca = fit(PCA, normdata')
